@@ -13,35 +13,18 @@ public class Solver {
         this.board = board;
     }
 
-    public Board findBestSolution(Set<Board> solutions) {
-        int bestSolutionLength = Integer.MAX_VALUE;
-        Board bestSolution = null;
-
-        for (Board b : solutions) {
-            List<Transition> solution = b.getTransitions();
-
-            if (solution.size() < bestSolutionLength) {
-                bestSolutionLength = solution.size();
-                bestSolution = b;
-            }
-        }
-        return bestSolution;
-    }
-
-    public Set<Board> solve() {
-        Set<Board> solutions = new HashSet<>();
+    public Board solve() {
         Set<Board> seenBoards = new HashSet<>();
         Queue<Board> nextBoards = new LinkedList<>();
         nextBoards.add(this.board);
         seenBoards.add(this.board);
 
-        Board currentBoard;
+        Board currentBoard = null;
         while (!nextBoards.isEmpty()) {
             currentBoard = nextBoards.poll();
 
             if (currentBoard.isSolved()) {
-                solutions.add(currentBoard);
-                continue;
+                break;
             }
 
 
@@ -67,7 +50,6 @@ public class Solver {
             }
         }
 
-        return solutions;
-
+        return currentBoard;
     }
 }

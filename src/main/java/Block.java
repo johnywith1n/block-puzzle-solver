@@ -13,24 +13,28 @@ public class Block {
     private final ImmutableList<Position> positions;
     private final boolean isSpecial;
 
-    public Block(Orientation orientation, int length, List<Position> positions) {
+    public Block(Orientation orientation, int length, Position head, boolean isSpecial) {
         this.orientation = orientation;
         this.length = length;
-        Collections.sort(positions);
-        this.positions = ImmutableList.copyOf(positions);
-        isSpecial = false;
-    }
-
-    public Block(Orientation orientation, int length, List<Position> positions, boolean isSpecial) {
-        this.orientation = orientation;
-        this.length = length;
-        Collections.sort(positions);
-        this.positions = ImmutableList.copyOf(positions);
         this.isSpecial = isSpecial;
+
+        ImmutableList.Builder<Position> builder = ImmutableList.builder();
+        builder.add(head);
+        for (int i = 1; i < this.length; i++) {
+            if (this.orientation == Orientation.HORIZONTAL) {
+                builder.add(new Position(head.getX() + i, head.getY()));
+            } else {
+                builder.add(new Position(head.getX(), head.getY() + i));
+            }
+        }
+        this.positions = builder.build();
+    }
+    public Block(Orientation orientation, int length, Position head) {
+        this(orientation, length, head, false);
     }
 
     public Block moveBlock(List<Position> newPositions) {
-        return new Block(this.getOrientation(), this.getLength(), newPositions, this.isSpecial());
+        return new Block(this.getOrientation(), this.getLength(), newPositions.get(0), this.isSpecial());
     }
 
     public Orientation getOrientation() {

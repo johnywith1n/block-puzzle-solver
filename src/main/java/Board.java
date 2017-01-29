@@ -63,15 +63,57 @@ public class Board {
     }
 
     private boolean isAllowedMove(Block b, List<Position> newPosition) {
-        for (Position p : newPosition) {
-            if (b.isSpecial() && p.getX() >= this.board.length) {
+        Position oldStart = b.getPositions().get(0);
+        Position oldEnd = b.getPositions().get(b.getPositions().size() - 1);
+        Position newStart = newPosition.get(0);
+        Position newEnd = newPosition.get(newPosition.size() - 1);
+
+        int start, end;
+        if (b.getOrientation() == Orientation.HORIZONTAL) {
+            start = newStart.getX();
+            end = oldStart.getX();
+
+            if (end < start) {
+                start = oldEnd.getX();
+                end = newEnd.getX();
+            }
+
+        } else {
+            start = newStart.getY();
+            end = oldStart.getY();
+
+            if (end < start) {
+                start = oldEnd.getY();
+                end = newEnd.getY();
+            }
+        }
+
+        for (int i = start; i <= end; i++) {
+            if (b.isSpecial() && i >= this.board.length) {
                 continue;
             }
-            Block blockAtPosition = this.board[p.getX()][p.getY()];
+
+            Block blockAtPosition;
+            if (b.getOrientation() == Orientation.HORIZONTAL) {
+                blockAtPosition = this.board[i][oldStart.getY()];
+            } else {
+                blockAtPosition = this.board[oldStart.getX()][i];
+            }
             if (blockAtPosition != null && !blockAtPosition.equals(b)) {
                 return false;
             }
         }
+
+//        for (Position p : newPosition) {
+//            if (b.isSpecial() && p.getX() >= this.board.length) {
+//                continue;
+//            }
+//            Block blockAtPosition = this.board[p.getX()][p.getY()];
+//            if (blockAtPosition != null && !blockAtPosition.equals(b)) {
+//                return false;
+//            }
+//        }
+
         return true;
     }
 
@@ -95,7 +137,7 @@ public class Board {
 
         if (block.getOrientation() == Orientation.VERTICAL) {
             int y = head.getY();
-            for (int i = 1; i <= block.getLength(); i++) {
+            for (int i = 1; i <= this.board.length; i++) {
                 int newY = y - i;
                 if (newY > -1) {
                     List<Position> newPositions = new ArrayList<>();
@@ -111,7 +153,7 @@ public class Board {
             }
         } else {
             int x = head.getX();
-            for (int i = 1; i <= block.getLength(); i++) {
+            for (int i = 1; i <= this.board.length; i++) {
                 int newX = x - i;
                 if (newX > -1) {
                     List<Position> newPositions = new ArrayList<>();
@@ -130,7 +172,7 @@ public class Board {
         Position tail = block.getPositions().get(block.getPositions().size() - 1);
         if (block.getOrientation() == Orientation.VERTICAL) {
             int y = tail.getY();
-            for (int i = 1; i <= block.getLength(); i++) {
+            for (int i = 1; i <= this.board.length; i++) {
                 int newY = y + i;
                 if (newY < this.board.length) {
                     List<Position> newPositions = new ArrayList<>();
@@ -146,7 +188,7 @@ public class Board {
             }
         } else {
             int x = tail.getX();
-            for (int i = 1; i <= block.getLength(); i++) {
+            for (int i = 1; i <= this.board.length; i++) {
                 int newX = x + i;
                 boolean solved = block.isSpecial() && tail.getY() == 2 && newX > 5;
                 if (newX < this.board[0].length || solved) {
