@@ -70,8 +70,8 @@ public class Transition {
 
     @Override
     public String toString() {
-        return "before=" + before +
-                "\n, after=" + after +
+        return "before: " + before +
+                "\nafter:  " + after +
                 "\n\n";
     }
 }

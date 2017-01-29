@@ -52,4 +52,14 @@ public class Solver {
 
         return currentBoard;
     }
+
+    public static void solveBoard(Board board) {
+        List<Transition> solution = new Solver(board).solve().getTransitions();
+
+        System.out.println("Number of moves: " + solution.size());
+
+        for (Transition t : solution) {
+            System.out.println(t);
+        }
+    }
 }

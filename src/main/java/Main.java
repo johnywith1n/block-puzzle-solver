@@ -26,13 +26,6 @@ public class Main {
 
         Board board = new Board(blocks, 6, 6, null, null);
 
-        Solver solver = new Solver(board);
-        List<Transition> solution = solver.solve().getTransitions();
-
-        System.out.println(solution.size());
-
-        for (Transition t : solution) {
-            System.out.println(t);
-        }
+        Solver.solveBoard(board);
     }
 }
