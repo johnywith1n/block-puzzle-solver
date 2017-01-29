@@ -104,16 +104,6 @@ public class Board {
             }
         }
 
-//        for (Position p : newPosition) {
-//            if (b.isSpecial() && p.getX() >= this.board.length) {
-//                continue;
-//            }
-//            Block blockAtPosition = this.board[p.getX()][p.getY()];
-//            if (blockAtPosition != null && !blockAtPosition.equals(b)) {
-//                return false;
-//            }
-//        }
-
         return true;
     }
 
