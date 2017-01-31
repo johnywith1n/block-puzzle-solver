@@ -6,16 +6,28 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by pikachu on 1/28/17.
+ * Represents a board containing blocks
+ *
+ * Created by johny.lam on 1/28/17.
  */
 public class Board {
 
     private final ImmutableList<Block> blocks;
+    /* The Block that needs to exit the board for it to be solved */
+    private final Block specialBlock;
+    /* The representation of the board and which units are occupied by which block */
     private final Block[][] board;
     private final Transition transition;
     private final Board parent;
-    private final Block specialBlock;
 
+    /**
+     * Create a new board
+     * @param blocks the blocks contained on thsib oard
+     * @param rowLength how long each row is on the board
+     * @param columnLength how long each column is on the board
+     * @param transition which block moved to transition this board configuration
+     * @param parent the board representing the previous configuration before the transition block moved
+     */
     public Board(List<Block> blocks, int rowLength, int columnLength, Transition transition, Board parent) {
         this.blocks = ImmutableList.copyOf(blocks);
         this.board = new Block[rowLength][columnLength];
@@ -37,6 +49,12 @@ public class Board {
         this.specialBlock = specialBlock;
     }
 
+    /**
+     * Creates a new block from this board by moving a block
+     * @param newBlocks the blocks for the new configuration
+     * @param transition the current and next configuration for the block that moved
+     * @return
+     */
     public Board moveBlocks(List<Block> newBlocks, Transition transition) {
         int rowLength = this.board.length;
         int columnLength = this.board[0].length;
@@ -56,12 +74,21 @@ public class Board {
         return parent;
     }
 
+    /**
+     * @return Whether or not the board is in a solved configuration
+     */
     public boolean isSolved() {
         List<Position> specialBlockPositions = this.specialBlock.getPositions();
         Position tail = specialBlockPositions.get(specialBlockPositions.size() - 1);
         return tail.getX() >= this.board.length;
     }
 
+    /**
+     * Checks whether or not the block can be moved to its new position
+     * @param b the block to check
+     * @param newPosition the new position the block occupies
+     * @return whether or not the move is allowed
+     */
     private boolean isAllowedMove(Block b, List<Position> newPosition) {
         Position oldStart = b.getPositions().get(0);
         Position oldEnd = b.getPositions().get(b.getPositions().size() - 1);
@@ -107,6 +134,9 @@ public class Board {
         return true;
     }
 
+    /**
+     * @return Returns a list of transitions leading from the initial board configuration to the current configuration
+     */
     public List<Transition> getTransitions() {
         LinkedList<Transition> transitions = new LinkedList<>();
         Board b = this;
@@ -120,6 +150,11 @@ public class Board {
         return Transition.compress(transitions);
     }
 
+    /**
+     * Generate the blocks that can come about as a result of moving the given block
+     * @param block the block to move
+     * @return a list of blocks that can result from moving the given block
+     */
     public List<Block> possibleMoves(Block block) {
         List<Block> result = new ArrayList<>();
 
@@ -135,7 +170,7 @@ public class Board {
                         newPositions.add(new Position(p.getX(), p.getY() - i));
                     }
                     if (isAllowedMove(block, newPositions)) {
-                        result.add(block.moveBlock(newPositions));
+                        result.add(block.moveBlock(newPositions.get(0)));
                     }
                 } else {
                     break;
@@ -151,7 +186,7 @@ public class Board {
                         newPositions.add(new Position(p.getX() - i, p.getY()));
                     }
                     if (isAllowedMove(block, newPositions)) {
-                        result.add(block.moveBlock(newPositions));
+                        result.add(block.moveBlock(newPositions.get(0)));
                     }
                 } else {
                     break;
@@ -170,7 +205,7 @@ public class Board {
                         newPositions.add(new Position(p.getX(), p.getY() + i));
                     }
                     if (isAllowedMove(block, newPositions)) {
-                        result.add(block.moveBlock(newPositions));
+                        result.add(block.moveBlock(newPositions.get(0)));
                     }
                 } else {
                     break;
@@ -187,7 +222,7 @@ public class Board {
                         newPositions.add(new Position(p.getX() + i, p.getY()));
                     }
                     if (isAllowedMove(block, newPositions)) {
-                        result.add(block.moveBlock(newPositions));
+                        result.add(block.moveBlock(newPositions.get(0)));
                     }
                     if (solved) {
                         break;

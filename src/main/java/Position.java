@@ -1,5 +1,7 @@
 /**
- * Created by pikachu on 1/28/17.
+ * The coordinates of a block on the board. The origin is the top left corner
+ *
+ * Created by johny.lam on 1/28/17.
  */
 public class Position implements Comparable<Position> {
     private final int x;

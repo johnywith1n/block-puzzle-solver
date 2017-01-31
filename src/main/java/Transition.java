@@ -2,7 +2,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by pikachu on 1/28/17.
+ * Represents which block moved with it's previous and next configurations
+ *
+ * Created by johny.lam on 1/28/17.
  */
 public class Transition {
 
@@ -22,6 +24,11 @@ public class Transition {
         return after;
     }
 
+    /**
+     * Compresses a list of transitions by combining consecutive transitions that could be made with only one move
+     * @param transitions a list of transitions
+     * @return the compressed transitions
+     */
     public static List<Transition> compress(List<Transition> transitions) {
         List<Transition> result = new ArrayList<>();
 

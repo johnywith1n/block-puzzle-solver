@@ -1,10 +1,9 @@
 import com.google.common.collect.ImmutableList;
 
-import java.util.Collections;
-import java.util.List;
-
 /**
- * Created by pikachu on 1/28/17.
+ * Represents a block on the board
+ *
+ * Created by johny.lam on 1/28/17.
  */
 public class Block {
 
@@ -13,6 +12,13 @@ public class Block {
     private final ImmutableList<Position> positions;
     private final boolean isSpecial;
 
+    /**
+     * Create a new Block
+     * @param orientation whether the block is horizontal or vertical
+     * @param length how many units long is the block
+     * @param head the position of the first unit that this block occupies on the board with the top left being the origin
+     * @param isSpecial whether or not this block is the block that needs to exit the board to solve the puzzle
+     */
     public Block(Orientation orientation, int length, Position head, boolean isSpecial) {
         this.orientation = orientation;
         this.length = length;
@@ -29,12 +35,18 @@ public class Block {
         }
         this.positions = builder.build();
     }
+
     public Block(Orientation orientation, int length, Position head) {
         this(orientation, length, head, false);
     }
 
-    public Block moveBlock(List<Position> newPositions) {
-        return new Block(this.getOrientation(), this.getLength(), newPositions.get(0), this.isSpecial());
+    /**
+     * Creates a new block that represents moving this block to the new position
+     * @param newPosition the position of the first unit that this block now occupies on the board with the top left being the origin
+     * @return a new Block at the new position
+     */
+    public Block moveBlock(Position newPosition) {
+        return new Block(this.getOrientation(), this.getLength(), newPosition, this.isSpecial());
     }
 
     public Orientation getOrientation() {

@@ -3,7 +3,9 @@ import com.google.common.collect.Lists;
 import java.util.*;
 
 /**
- * Created by pikachu on 1/28/17.
+ * A solver for the puzzle
+ *
+ * Created by johny.lam on 1/28/17.
  */
 public class Solver {
 
@@ -13,6 +15,12 @@ public class Solver {
         this.board = board;
     }
 
+    /**
+     * Solves the given board using breadth first search to find the closest path from the initial board
+     * configuration to the solved state
+     *
+     * @return first board found that is in a solved state
+     */
     public Board solve() {
         Set<Board> seenBoards = new HashSet<>();
         Queue<Board> nextBoards = new LinkedList<>();
@@ -53,6 +61,10 @@ public class Solver {
         return currentBoard;
     }
 
+    /**
+     * Helper method that take a board and prints of the transitions that will solve it
+     * @param board the board to solve
+     */
     public static void solveBoard(Board board) {
         List<Transition> solution = new Solver(board).solve().getTransitions();
 
